@@ -1,39 +1,35 @@
-# Task Manager API
+# 🗂️ Task Manager API
 
-![CI](https://github.com/JansenWillow/task-manager-api/actions/workflows/ci.yml/badge.svg)
-![Python](https://img.shields.io/badge/Python-3.11-3776AB)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688)
-![pytest](https://img.shields.io/badge/pytest-30%20tests-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-80%25-success)
+<div align="center">
 
-REST API untuk manajemen tugas berbasis FastAPI + SQLite. Final Project Mata Kuliah Software Testing.
+[![CI Pipeline](https://github.com/JansenWillow/task-manager-api/actions/workflows/ci.yml/badge.svg)](https://github.com/JansenWillow/task-manager-api/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?logo=sqlite&logoColor=white)
+![pytest](https://img.shields.io/badge/pytest-30%20tests-brightgreen?logo=pytest&logoColor=white)
+![Coverage](https://img.shields.io/badge/coverage-95%25-success)
 
-## Fitur
-- CRUD Task (create, read, update, delete)
-- Filter berdasarkan status & prioritas
-- Statistik task
-- Validasi input dengan Pydantic
-- CI/CD dengan GitHub Actions
+**REST API untuk manajemen tugas berbasis FastAPI + SQLite**
 
-## Cara Menjalankan
+_Final Project — Mata Kuliah Software Testing_
 
-    pip install -r requirements.txt
-    uvicorn app.main:app --reload
+</div>
 
-Buka http://localhost:8000/docs
+---
 
-## Cara Menjalankan Test
+## ✨ Fitur Utama
 
-    pytest
+| Fitur | Deskripsi |
+|-------|-----------|
+| 📝 CRUD Task | Buat, lihat, update, dan hapus tugas |
+| 🔍 Filter & Query | Filter berdasarkan status dan prioritas |
+| 📊 Statistik | Ringkasan total, selesai, dan pending task |
+| 🛡️ Validasi Input | Validasi ketat dengan Pydantic v2 |
+| 🎨 Frontend UI | Dark theme modern yang responsif |
+| 🤖 CI/CD | Auto-test tiap push via GitHub Actions |
 
-## Strategi Pengujian
-- 22 Unit Tests (schema validation, service logic)
-- 8 Integration Tests (API endpoints, database)
-- Target coverage: 60%, aktual >80%
+---
 
-## CI/CD Pipeline
-Workflow GitHub Actions otomatis menjalankan test pada setiap push & pull request.
+## 🚀 Cara Menjalankan Aplikasi
 
-## Coverage Report
-
-Lihat laporan coverage interaktif di: https://jansenwillow.github.io/task-manager-api/
+```bash
