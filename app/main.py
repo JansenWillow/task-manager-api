@@ -1,4 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends, Query
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app import models, schemas, service
@@ -7,8 +9,12 @@ from app.database import engine, get_db
 models.Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Task Manager API", version="1.0.0")
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def root():
+    return FileResponse("static/index.html")
+
+@app.get("/api", include_in_schema=False)
+def api_status():
     return {"message": "Task Manager API is running", "version": "1.0.0"}
 
 @app.get("/tasks", response_model=List[schemas.TaskResponse])
@@ -39,3 +45,5 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
 @app.get("/stats")
 def get_stats(db: Session = Depends(get_db)):
     return service.get_task_stats(db)
+
+app.mount("/static", StaticFiles(directory="static"), name="static")

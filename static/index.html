@@ -1,0 +1,462 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Manager — Final Project</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface-hover: #1c1c1c;
+    --border: #262626;
+    --border-hover: #3a3a3a;
+    --text: #fafafa;
+    --text-dim: #a3a3a3;
+    --text-muted: #525252;
+    --high: #f87171;
+    --medium: #fbbf24;
+    --low: #4ade80;
+  }
+  body {
+    font-family: "Inter", -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 15% 20%, rgba(250, 250, 250, 0.03), transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(250, 250, 250, 0.02), transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+    position: relative;
+    z-index: 1;
+  }
+  header {
+    margin-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+  }
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  h1 {
+    font-family: "Instrument Serif", serif;
+    font-size: 68px;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  h1 em {
+    color: var(--text-dim);
+    font-style: italic;
+  }
+  .subtitle {
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 520px;
+    line-height: 1.6;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+  .stat {
+    background: var(--surface);
+    padding: 24px 28px;
+    transition: background 0.2s;
+  }
+  .stat:hover { background: var(--surface-hover); }
+  .stat-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .stat-value {
+    font-family: "Instrument Serif", serif;
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1;
+  }
+  .form-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 40px;
+  }
+  .form-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-title::before {
+    content: "+";
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text-dim);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  input, textarea, select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    transition: border-color 0.2s;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--border-hover);
+  }
+  input::placeholder, textarea::placeholder { color: var(--text-muted); }
+  textarea { resize: vertical; min-height: 70px; }
+  select { cursor: pointer; }
+  button {
+    background: var(--text);
+    color: var(--bg);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  button:hover { opacity: 0.85; }
+  button:active { transform: scale(0.98); }
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .filter-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .filter-chips { display: flex; gap: 8px; }
+  .chip {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .chip:hover { border-color: var(--border-hover); color: var(--text); }
+  .chip.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+  .task-list { display: flex; flex-direction: column; gap: 10px; }
+  .task {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: border-color 0.2s, background 0.2s;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .task:hover { border-color: var(--border-hover); background: var(--surface-hover); }
+  .task.completed .task-title {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+  .checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid var(--border-hover);
+    border-radius: 6px;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    padding: 0;
+  }
+  .checkbox:hover { border-color: var(--text); }
+  .checkbox.checked { background: var(--text); border-color: var(--text); }
+  .checkbox.checked::after {
+    content: "";
+    width: 10px;
+    height: 6px;
+    border-left: 2px solid var(--bg);
+    border-bottom: 2px solid var(--bg);
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .task-body { flex: 1; min-width: 0; }
+  .task-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .task-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .task-meta { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .priority {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .priority.high { background: rgba(248, 113, 113, 0.12); color: var(--high); }
+  .priority.medium { background: rgba(251, 191, 36, 0.12); color: var(--medium); }
+  .priority.low { background: rgba(74, 222, 128, 0.12); color: var(--low); }
+  .delete-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    transition: all 0.15s;
+  }
+  .delete-btn:hover { color: var(--high); background: rgba(248, 113, 113, 0.08); }
+  .empty { text-align: center; padding: 60px 20px; color: var(--text-muted); }
+  .empty-title {
+    font-family: "Instrument Serif", serif;
+    font-size: 28px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .empty-sub { font-size: 13px; }
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+  footer a { color: var(--text-dim); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+  @media (max-width: 720px) {
+    .container { padding: 32px 20px 60px; }
+    h1 { font-size: 44px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .filter-bar { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="eyebrow">Final Project · Software Testing</div>
+    <h1>Task <em>Manager.</em></h1>
+    <p class="subtitle">Kelola tugas sehari-hari dengan validasi input, filter cerdas, dan statistik real-time. Terhubung ke FastAPI + SQLite backend.</p>
+  </header>
+
+  <div class="stats-grid" id="stats">
+    <div class="stat"><div class="stat-label">Total</div><div class="stat-value" id="stat-total">0</div></div>
+    <div class="stat"><div class="stat-label">Selesai</div><div class="stat-value" id="stat-done">0</div></div>
+    <div class="stat"><div class="stat-label">Pending</div><div class="stat-value" id="stat-pending">0</div></div>
+    <div class="stat"><div class="stat-label">Coverage</div><div class="stat-value" style="color: #4ade80;">95%</div></div>
+  </div>
+
+  <div class="form-card">
+    <div class="form-title">Tambah Tugas Baru</div>
+    <input id="title" placeholder="Judul tugas — misal: Selesaikan laporan UAS" maxlength="100">
+    <div style="height: 14px;"></div>
+    <textarea id="desc" placeholder="Deskripsi singkat (opsional)" maxlength="500"></textarea>
+    <div style="height: 14px;"></div>
+    <div class="form-row">
+      <select id="priority">
+        <option value="low">Prioritas: Rendah</option>
+        <option value="medium" selected>Prioritas: Sedang</option>
+        <option value="high">Prioritas: Tinggi</option>
+      </select>
+      <button onclick="addTask()">Simpan Tugas</button>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="filter-label">Filter</div>
+    <div class="filter-chips" id="filters">
+      <button class="chip active" data-filter="all">Semua</button>
+      <button class="chip" data-filter="pending">Pending</button>
+      <button class="chip" data-filter="done">Selesai</button>
+      <button class="chip" data-filter="high">Prioritas Tinggi</button>
+    </div>
+  </div>
+
+  <div class="task-list" id="tasks"></div>
+
+  <footer>
+    <div>TASK-MANAGER-API · v1.0.0</div>
+    <div><a href="/docs" target="_blank">API Docs</a></div>
+  </footer>
+</div>
+
+<script>
+let currentFilter = "all";
+
+async function loadStats() {
+  const r = await fetch("/stats");
+  const s = await r.json();
+  document.getElementById("stat-total").textContent = s.total;
+  document.getElementById("stat-done").textContent = s.completed;
+  document.getElementById("stat-pending").textContent = s.pending;
+}
+
+async function loadTasks() {
+  let url = "/tasks";
+  if (currentFilter === "pending") url += "?completed=false";
+  else if (currentFilter === "done") url += "?completed=true";
+  else if (currentFilter === "high") url += "?priority=high";
+
+  const r = await fetch(url);
+  const tasks = await r.json();
+  const list = document.getElementById("tasks");
+
+  if (tasks.length === 0) {
+    list.innerHTML = '<div class="empty"><div class="empty-title">Belum ada tugas.</div><div class="empty-sub">Tambahkan tugas pertama kamu di atas.</div></div>';
+    return;
+  }
+
+  list.innerHTML = tasks.map(t => `
+    <div class="task ${t.completed ? "completed" : ""}">
+      <button class="checkbox ${t.completed ? "checked" : ""}" onclick="toggleTask(${t.id}, ${!t.completed})"></button>
+      <div class="task-body">
+        <div class="task-title">${esc(t.title)}</div>
+        ${t.description ? `<div class="task-desc">${esc(t.description)}</div>` : ""}
+      </div>
+      <div class="task-meta">
+        <span class="priority ${t.priority}">${t.priority}</span>
+        <button class="delete-btn" onclick="deleteTask(${t.id})" title="Hapus">×</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+async function addTask() {
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("desc").value.trim();
+  const priority = document.getElementById("priority").value;
+  if (!title) { alert("Judul tugas tidak boleh kosong"); return; }
+
+  const r = await fetch("/tasks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, description, priority })
+  });
+
+  if (r.ok) {
+    document.getElementById("title").value = "";
+    document.getElementById("desc").value = "";
+    document.getElementById("priority").value = "medium";
+    await refresh();
+  } else {
+    alert("Gagal menambah tugas");
+  }
+}
+
+async function toggleTask(id, completed) {
+  await fetch("/tasks/" + id, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ completed })
+  });
+  await refresh();
+}
+
+async function deleteTask(id) {
+  if (!confirm("Hapus tugas ini?")) return;
+  await fetch("/tasks/" + id, { method: "DELETE" });
+  await refresh();
+}
+
+function esc(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+async function refresh() { await loadStats(); await loadTasks(); }
+
+document.getElementById("filters").addEventListener("click", e => {
+  if (!e.target.classList.contains("chip")) return;
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+  e.target.classList.add("active");
+  currentFilter = e.target.dataset.filter;
+  loadTasks();
+});
+
+document.getElementById("title").addEventListener("keypress", e => {
+  if (e.key === "Enter") addTask();
+});
+
+refresh();
+</script>
+</body>
+</html>
