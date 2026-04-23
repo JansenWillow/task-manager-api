@@ -1,9 +1,9 @@
 # Task Manager API
-![CI](https://github.com/JansenWillow/task-manager-api/actions/workflows/ci.yml/badge.svg)
-![Python](https://img.shields.io/badge/Python-3.11-3776AB)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688)
-![pytest](https://img.shields.io/badge/pytest-30%20tests-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-80%25-success)
+![CI Pipeline](https://github.com/JansenWillow/task-manager-api/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green)
+![pytest](https://img.shields.io/badge/pytest-30_tests-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-95%25-success)
 REST API untuk manajemen tugas berbasis FastAPI + SQLite. Final Project Mata Kuliah Software Testing.
 ## Fitur
 - CRUD Task (create, read, update, delete)
