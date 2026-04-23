@@ -33,3 +33,7 @@ Buka http://localhost:8000/docs
 
 ## CI/CD Pipeline
 Workflow GitHub Actions otomatis menjalankan test pada setiap push & pull request.
+
+## Coverage Report
+
+Lihat laporan coverage interaktif di: https://jansenwillow.github.io/task-manager-api/
